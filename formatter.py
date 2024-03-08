@@ -225,13 +225,22 @@ class Formatter:
             format_dict[E_UPPER] = "e"
         elif format_dict[E_UPPER] == "2":
             format_dict[E_UPPER] = "f"
+        else:
+            raise ValueError("E_LOWER has to be 'e' or 'f'!")
         if format_dict[E_LOWER] == "1":
             format_dict[E_LOWER] = "e"
         elif format_dict[E_LOWER] == "2":
             format_dict[E_LOWER] = "f"
+        else:
+            raise ValueError("E_UPPER has to be 'e' or 'f'!")
 
         if not format_dict[N_LOWER]:
-            pass
+            if format_dict[E_LOWER] == "e":
+                format_dict[N_LOWER] = "1"
+            else:
+                format_dict[N_LOWER] = "2"
+            if not format_dict[N_UPPER]:
+                format_dict[N_UPPER] = r"{}"
 
         if not format_dict[UNCERTAINTY]:
             format_dict[UNCERTAINTY] = DEFAULT_UNCERTAINTY

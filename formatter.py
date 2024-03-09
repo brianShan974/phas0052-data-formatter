@@ -1,4 +1,3 @@
-from enum import UNIQUE
 from get_n import *
 
 # input format
@@ -97,6 +96,7 @@ class Formatter:
         format_dict[TAG] = self.tag
 
         for item_format, item in zip(self.input_format, input_items):
+            print(item_format, item)
             if len(item_format) == 1:
                 format_dict[item_format] = item
             else:
@@ -120,6 +120,7 @@ class Formatter:
                             format_dict[item_format[i]] = item[starting_pos:ending_pos]
                         i += 1
                         j += 1
+        print(format_dict)
 
         if not format_dict[P_UPPER]:
             v1_upper = int(format_dict[V1_UPPER])

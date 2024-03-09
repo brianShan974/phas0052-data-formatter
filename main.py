@@ -1,6 +1,8 @@
 import os
 import sys
 
+import bisect
+
 from formatter import Formatter
 
 
@@ -33,6 +35,8 @@ def main():
     result_with_n = []
     result_without_n = []
 
+    file_names = ["22KaTaKaCa.txt"]
+
     for file_name in file_names:
         print(f"Processing {input_dir_name}{file_name}")
         tag = "".join(file_name.split(".")[0].split())
@@ -42,9 +46,10 @@ def main():
             lines = f.readlines()
             format = lines.pop(0)
             for line in lines:
+                print(line)
                 formatted_line = formatter.format(line)
                 if r"{}" in formatted_line:
-                    result_without_n.append(formatted_line)
+                    bisect.insort(result_without_n, formatted_line, key=line_sort_key)
                 else:
                     result_with_n.append(formatted_line)
             # result = [formatter.format(line) + '\n' for line in lines]
@@ -54,6 +59,9 @@ def main():
             #         result.append(formatter.format(line) + "\n")
             #     except ValueError:
             #         print(f"N and P not found in file {file_name} on line {i}!")
+    with open("marvel.dat", "w") as f:
+        for line in result_without_n:
+            f.write(line + "\n")
 
 
 if __name__ == "__main__":

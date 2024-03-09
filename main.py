@@ -45,6 +45,7 @@ def main():
         with open(f"{input_dir_name}{file_name}") as f:
             lines = f.readlines()
             format = lines.pop(0)
+            formatter.reset(format, tag)
             for line in lines:
                 print(line)
                 formatted_line = formatter.format(line)

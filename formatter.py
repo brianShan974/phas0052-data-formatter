@@ -79,9 +79,13 @@ class Formatter:
         self.tag = tag
 
     def format(self, input_str: str) -> str:
+        print(f"{self.input_format = }")
+        print(f"{input_str = }")
         input_items: list[str] = [
             item for item in input_str.strip().split() if is_valid(item)
         ][: len(self.input_format)]
+        print(f"{len(self.input_format) = }")
+        print(f"{input_items = }")
         # try:
         #     assert len(self.input_format) == len(input_items), "There is something wrong, either with the format, or with the input string."
         # except AssertionError:
@@ -96,7 +100,7 @@ class Formatter:
         format_dict[TAG] = self.tag
 
         for item_format, item in zip(self.input_format, input_items):
-            print(item_format, item)
+            print(f"{item_format = }, {item = }")
             if len(item_format) == 1:
                 format_dict[item_format] = item
             else:
@@ -226,14 +230,12 @@ class Formatter:
             format_dict[E_UPPER] = "e"
         elif format_dict[E_UPPER] == "2":
             format_dict[E_UPPER] = "f"
-        else:
-            raise ValueError("E_LOWER has to be 'e' or 'f'!")
         if format_dict[E_LOWER] == "1":
             format_dict[E_LOWER] = "e"
         elif format_dict[E_LOWER] == "2":
             format_dict[E_LOWER] = "f"
-        else:
-            raise ValueError("E_UPPER has to be 'e' or 'f'!")
+
+        assert format_dict[E_LOWER] in ('e', 'f') and format_dict[E_UPPER] in ('e', 'f'), "The value of e/f has to be either e or f!"
 
         if not format_dict[N_LOWER]:
             if format_dict[E_LOWER] == "e":

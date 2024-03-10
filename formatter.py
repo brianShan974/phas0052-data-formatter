@@ -24,7 +24,7 @@ TAG = "t"
 USELESS = "u"
 OVER = "O"
 
-DEFAULT_UNCERTAINTY = "0.01"
+DEFAULT_UNCERTAINTY = "0.001"
 
 
 # to use this formatter, provide it with the input string and the format of the input string

@@ -54,6 +54,7 @@ def find_n(lines_without_n: dict[str, list[str]]) -> list[str]:
         base_n = get_base_n(lines_without_n[key][0])
         for (i, line) in enumerate(lines_without_n[key]):
             lines_without_n[key][i] = lines_without_n[key][i].format(i + base_n)
+
     result = []
     for value in lines_without_n.values():
         result.extend(value)
@@ -69,9 +70,9 @@ def base10ToBase26Letter(num):
     if num <= 0:
         return ""
     elif num <= 26:
-        return chr(96+num)
+        return chr(64+num)
     else:
-        return base10ToBase26Letter(int((num-1)/26))+chr(97+(num-1)%26)
+        return base10ToBase26Letter(int((num-1)/26))+chr(64+(num-1)%26)
 
 
 def tag_lines_by_source_and_transitions(lines_with_n: list[str]) -> list[str]:
@@ -82,9 +83,15 @@ def tag_lines_by_source_and_transitions(lines_with_n: list[str]) -> list[str]:
             dict_for_tagging[key] = [line]
         else:
             dict_for_tagging[key].append(line)
-    for key in dict_for_tagging.keys():
-        pass
-    return []
+    for i, key in enumerate(dict_for_tagging.keys()):
+        letter_index = base10ToBase26Letter(i + 1)
+        for j, line in enumerate(dict_for_tagging[key]):
+            dict_for_tagging[key][j] = dict_for_tagging[key][j] + letter_index + str(j + 1)
+
+    result = []
+    for value in dict_for_tagging.values():
+        result.extend(value)
+    return result
 
 
 def main():
@@ -130,8 +137,10 @@ def main():
             for _ in range(5):
                 print()
     lines_with_n.extend(find_n(lines_without_n))
+    tagged_lines = tag_lines_by_source_and_transitions(lines_with_n)
+    tagged_lines.sort(key=lower_state_sort_key)
     with open("marvel.dat", "w") as f:
-        for line in lines_with_n:
+        for line in tagged_lines:
             f.write(line + "\n")
 
 

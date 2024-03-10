@@ -86,9 +86,9 @@ def main():
             #         result.append(formatter.format(line) + "\n")
             #     except ValueError:
             #         print(f"N and P not found in file {file_name} on line {i}!")
-            lines_with_n.extend(find_n(lines_without_n))
             for _ in range(5):
                 print()
+    lines_with_n.extend(find_n(lines_without_n))
     with open("marvel.dat", "w") as f:
         for line in lines_with_n:
             f.write(line + "\n")

@@ -1,4 +1,4 @@
-from get_n import *
+from get_n import get_n
 
 # input format
 TRANSITION_WAVENUMBER = "T"
@@ -232,7 +232,10 @@ class Formatter:
         elif format_dict[E_LOWER] == "2":
             format_dict[E_LOWER] = "f"
 
-        assert format_dict[E_LOWER] in ('e', 'f') and format_dict[E_UPPER] in ('e', 'f'), "The value of e/f has to be either e or f!"
+        assert format_dict[E_LOWER] in ("e", "f") and format_dict[E_UPPER] in (
+            "e",
+            "f",
+        ), "The value of e/f has to be either e or f!"
 
         # if not format_dict[N_LOWER]:
         #     if format_dict[E_LOWER] == "e":
@@ -241,11 +244,35 @@ class Formatter:
         #         format_dict[N_LOWER] = "2"
         #     if not format_dict[N_UPPER]:
         #         format_dict[N_UPPER] = r"{}"
-        
+
         if not format_dict[N_UPPER]:
-            format_dict[N_UPPER] = r"{}"
+            try:
+                format_dict[N_UPPER] = get_n(
+                    tuple(
+                        [
+                            format_dict[V1_UPPER],
+                            format_dict[V2_UPPER],
+                            format_dict[V3_UPPER],
+                            format_dict[L_UPPER],
+                        ]
+                    )
+                )
+            except KeyError:
+                format_dict[N_UPPER] = "1"
         if not format_dict[N_LOWER]:
-            format_dict[N_LOWER] = r"{}"
+            try:
+                format_dict[N_LOWER] = get_n(
+                    tuple(
+                        [
+                            format_dict[V1_LOWER],
+                            format_dict[V2_LOWER],
+                            format_dict[V3_LOWER],
+                            format_dict[L_LOWER],
+                        ]
+                    )
+                )
+            except KeyError:
+                format_dict[N_LOWER] = "1"
 
         if not format_dict[UNCERTAINTY]:
             format_dict[UNCERTAINTY] = DEFAULT_UNCERTAINTY

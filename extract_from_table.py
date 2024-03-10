@@ -20,8 +20,14 @@ def get_l_from_line(line: str) -> str:
     return line.split()[6]
 
 
-def line_key(line: str) -> str:
+def line_key_pl(line: str) -> str:
     return get_p_from_line(line) + " " + get_l_from_line(line)
+
+
+def line_key_full(line: str) -> str:
+    splitted_line = line.split()
+    v1, v2, v3, l = [int(splitted_line[i]) for i in (4, 5, 7, 6)]
+    return f"{v1} {v2} {v3} {l}"
 
 
 def sort_key(line: str) -> float:
@@ -30,12 +36,29 @@ def sort_key(line: str) -> float:
 
 def main():
     with open(file_name) as f:
-        lines = [line for line in f.readlines() if is_valid(line)]
+        lines = [
+            " ".join(line.strip().split()) for line in f.readlines() if is_valid(line)
+        ]
+
+    temp_table: dict[str, list[str]] = {}
+    lowest_lines: list[str] = []
 
     table: dict[str, list[str]] = {}
 
     for line in lines:
-        key = line_key(line)
+        key = line_key_full(line)
+        if key not in temp_table:
+            temp_table[key] = [line]
+        else:
+            temp_table[key].append(line)
+
+    for key in temp_table.keys():
+        temp_table[key].sort(key=sort_key)
+        lowest_line = temp_table[key][0]
+        lowest_lines.append(lowest_line)
+
+    for line in lowest_lines:
+        key = line_key_pl(line)
         if key not in table:
             table[key] = [line]
         else:
@@ -43,6 +66,8 @@ def main():
 
     for key in table.keys():
         table[key].sort(key=sort_key)
+        for i, line in enumerate(table[key]):
+            table[key][i] = table[key][i] + " " + str(i + 1) + "\n"
 
     with open(new_file_name, "w") as f:
         for value in table.values():

@@ -62,4 +62,27 @@ from extract_from_table import new_file_name as file_name
 #     f.writelines(lines)
 
 
-n_table = 
+def get_key(line: str) -> tuple[str, str, str, str]:
+    splitted_line = line.split()
+    # v1, v2, v3, l
+    return splitted_line[4], splitted_line[5], splitted_line[7], splitted_line[6]
+
+
+def find_n(line: str) -> str:
+    return line.split()[-1]
+
+
+n_table: dict[tuple[str, str, str, str], str] = {}
+
+with open(file_name) as f:
+    while line := f.readline():
+        key = get_key(line)
+        n_table[key] = find_n(line)
+    # for key, value in n_table.items():
+    #     if len(value) > 1:
+    #         print(f"{key = }, {value = }")
+    assert len(n_table) == 2017
+
+
+def get_n(quantum_numbers: tuple[str, str, str, str]) -> str:
+    return n_table[quantum_numbers]

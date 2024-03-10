@@ -1,13 +1,17 @@
-# file_name = "n2o.6iso.296K.1E-31.15Kcm-1.Y02-A8.dmsC.dat"
-file_name = "n2o.12iso.296K.1E-31.15Kcm-1.Y02-A8.dmsC.v2.dat"
-new_file_name = "extracted.dat"
-label = "42"
+# format j e/f # E v1 v2 l v3 useless u
+file_name = "./fort.1900.N2O.456.20211108"
+
+# new_file_name = "extracted.dat"
+new_file_name = "extracted_j_l.dat"
+
+
+def is_valid(line: str) -> bool:
+    splitted_line = line.split()
+    return splitted_line[0] == splitted_line[6]
+
 
 with open(file_name) as f:
-    lines = [
-        " ".join(line.split()[5: 13] + line.split()[14: 17] + line.split()[18: 19] + line.split()[21:]) + '\n'
-        for line in f.readlines() if line.startswith(label)
-    ]
+    lines = [line for line in f.readlines() if is_valid(line)]
 
 with open(new_file_name, 'w') as f:
     f.writelines(lines)

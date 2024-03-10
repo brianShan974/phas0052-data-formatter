@@ -234,13 +234,18 @@ class Formatter:
 
         assert format_dict[E_LOWER] in ('e', 'f') and format_dict[E_UPPER] in ('e', 'f'), "The value of e/f has to be either e or f!"
 
+        # if not format_dict[N_LOWER]:
+        #     if format_dict[E_LOWER] == "e":
+        #         format_dict[N_LOWER] = "1"
+        #     else:
+        #         format_dict[N_LOWER] = "2"
+        #     if not format_dict[N_UPPER]:
+        #         format_dict[N_UPPER] = r"{}"
+        
+        if not format_dict[N_UPPER]:
+            format_dict[N_UPPER] = r"{}"
         if not format_dict[N_LOWER]:
-            if format_dict[E_LOWER] == "e":
-                format_dict[N_LOWER] = "1"
-            else:
-                format_dict[N_LOWER] = "2"
-            if not format_dict[N_UPPER]:
-                format_dict[N_UPPER] = r"{}"
+            format_dict[N_LOWER] = r"{}"
 
         if not format_dict[UNCERTAINTY]:
             format_dict[UNCERTAINTY] = DEFAULT_UNCERTAINTY

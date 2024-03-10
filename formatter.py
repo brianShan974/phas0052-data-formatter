@@ -77,15 +77,12 @@ class Formatter:
         if OVER in self.input_format:
             self.input_format.pop()
         self.tag = tag
+        print(f"{self.input_format = }")
 
     def format(self, input_str: str) -> str:
-        print(f"{self.input_format = }")
-        print(f"{input_str = }")
         input_items: list[str] = [
             item for item in input_str.strip().split() if is_valid(item)
         ][: len(self.input_format)]
-        print(f"{len(self.input_format) = }")
-        print(f"{input_items = }")
         # try:
         #     assert len(self.input_format) == len(input_items), "There is something wrong, either with the format, or with the input string."
         # except AssertionError:
@@ -109,7 +106,7 @@ class Formatter:
                 #     format_dict[qn] = value
                 if item_format[0] == BRANCH:
                     format_dict[BRANCH] = item[0]
-                    format_dict[item_format[1]] = str(int(item[1:]))
+                    format_dict[item_format[1]] = item[1:]
                 else:
                     i = 0
                     j = 0

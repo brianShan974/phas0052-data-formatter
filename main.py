@@ -1,7 +1,6 @@
 import os
-import sys
+from typing import Literal
 
-import bisect
 
 from formatter import Formatter
 
@@ -27,15 +26,35 @@ def write_to_file(tag, lines):
         f.writelines(lines)
 
 
+def n_sort_key(formatted_line: str) -> float:
+    return float(formatted_line.split()[0])
+
+
+def get_base_n(formatted_line: str) -> Literal[1, 2]:
+    return 1 if formatted_line.split()[-3] == 'e' else 2
+
+
+def find_n(lines_without_n: dict[str, list[str]]) -> list[str]:
+    for key in lines_without_n.keys():
+        lines_without_n[key].sort(key=n_sort_key)
+        base_n = get_base_n(lines_without_n[key][0])
+        for (i, line) in enumerate(lines_without_n[key]):
+            lines_without_n[key][i] = lines_without_n[key][i].format(i + base_n)
+    result = []
+    for value in lines_without_n.values():
+        result.extend(value)
+    return result
+
+
 def main():
     file_names = tuple([file_name for file_name in os.listdir(input_dir_name)])
 
     formatter = Formatter("", "")
 
-    result_with_n = []
-    result_without_n = []
+    lines_with_n = []
+    lines_without_n = {}
 
-    file_names = ["22KaTaKaCa.txt"]
+    # file_names = ["22KaTaKaCa.txt"]
 
     for file_name in file_names:
         print(f"Processing {input_dir_name}{file_name}")
@@ -47,12 +66,19 @@ def main():
             format = lines.pop(0)
             formatter.reset(format, tag)
             for line in lines:
-                print(line)
-                formatted_line = formatter.format(line)
+                print(f"{line = }")
+                try:
+                    formatted_line = formatter.format(line)
+                except AssertionError:
+                    continue
                 if r"{}" in formatted_line:
-                    bisect.insort(result_without_n, formatted_line, key=line_sort_key)
+                    key = line_sort_key(formatted_line)
+                    if key not in lines_without_n:
+                        lines_without_n[key] = [formatted_line]
+                    else:
+                        lines_without_n[key].append(formatted_line)
                 else:
-                    result_with_n.append(formatted_line)
+                    lines_with_n.append(formatted_line)
             # result = [formatter.format(line) + '\n' for line in lines]
             # result = []
             # for i, line in enumerate(lines):
@@ -60,8 +86,11 @@ def main():
             #         result.append(formatter.format(line) + "\n")
             #     except ValueError:
             #         print(f"N and P not found in file {file_name} on line {i}!")
+            lines_with_n.extend(find_n(lines_without_n))
+            for _ in range(5):
+                print()
     with open("marvel.dat", "w") as f:
-        for line in result_without_n:
+        for line in lines_with_n:
             f.write(line + "\n")
 
 

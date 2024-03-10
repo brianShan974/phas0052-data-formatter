@@ -11,7 +11,7 @@ if not os.path.exists(output_dir_name):
     os.mkdir(output_dir_name)
 
 
-def line_sort_key(formatted_line: str) -> str:
+def lower_state_sort_key(formatted_line: str) -> str:
     indices = (-6, -5, -3)
     splitted_line = formatted_line.split()
     return " ".join([splitted_line[index] for index in indices])
@@ -34,6 +34,20 @@ def get_base_n(formatted_line: str) -> Literal[1, 2]:
     return 1 if formatted_line.split()[-3] == 'e' else 2
 
 
+def get_tag(formatted_line: str) -> str:
+    return formatted_line.split()[-1]
+
+
+def transition_sort_key(formatted_line: str) -> str:
+    indices = (2, 3, 5, -6, -5, -3)
+    splitted_line = formatted_line.split()
+    return " ".join([splitted_line[index] for index in indices])
+
+
+def tag_sort_key(formatted_line: str) -> str:
+    return get_tag(formatted_line) + ' ' + transition_sort_key(formatted_line)
+
+
 def find_n(lines_without_n: dict[str, list[str]]) -> list[str]:
     for key in lines_without_n.keys():
         lines_without_n[key].sort(key=n_sort_key)
@@ -44,6 +58,33 @@ def find_n(lines_without_n: dict[str, list[str]]) -> list[str]:
     for value in lines_without_n.values():
         result.extend(value)
     return result
+
+
+# I found this code at https://codereview.stackexchange.com/questions/182733/base-26-letters-and-base-10-using-recursion
+def base10ToBase26Letter(num):
+    ''' Converts any positive integer to Base26(letters only) with no 0th 
+    case. Useful for applications such as spreadsheet columns to determine which 
+    Letterset goes with a positive integer.
+    '''
+    if num <= 0:
+        return ""
+    elif num <= 26:
+        return chr(96+num)
+    else:
+        return base10ToBase26Letter(int((num-1)/26))+chr(97+(num-1)%26)
+
+
+def tag_lines_by_source_and_transitions(lines_with_n: list[str]) -> list[str]:
+    dict_for_tagging: dict[str, list[str]] = {}
+    for line in lines_with_n:
+        key = tag_sort_key(line)
+        if key not in dict_for_tagging:
+            dict_for_tagging[key] = [line]
+        else:
+            dict_for_tagging[key].append(line)
+    for key in dict_for_tagging.keys():
+        pass
+    return []
 
 
 def main():
@@ -72,7 +113,7 @@ def main():
                 except AssertionError:
                     continue
                 if r"{}" in formatted_line:
-                    key = line_sort_key(formatted_line)
+                    key = lower_state_sort_key(formatted_line)
                     if key not in lines_without_n:
                         lines_without_n[key] = [formatted_line]
                     else:

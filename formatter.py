@@ -159,6 +159,13 @@ class Formatter:
                 else:
                     format_dict[J_LOWER] = str(j_upper)
 
+        assert int(format_dict[J_LOWER]) > int(
+            format_dict[L_LOWER]
+        ), "J has to be greater than or equal to L!"
+        assert int(format_dict[J_UPPER]) > int(
+            format_dict[L_UPPER]
+        ), "J has to be greater than or equal to L!"
+
         # if not format_dict[N_UPPER] or not format_dict[N_LOWER]:
         #     upper_v = tuple([format_dict[key] for key in [V1_UPPER, V2_UPPER, V3_UPPER]])
         #     assert "" not in upper_v

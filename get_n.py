@@ -79,7 +79,9 @@ def get_key(line: str) -> tuple[str, str, str, str]:
 
 def get_key_for_table(line: str) -> tuple[str, str, str, str]:
     splitted_line = line.split()
-    return tuple([splitted_line[1][i] for i in (0, 1, 3, 2)])
+    result = tuple([splitted_line[1][i] for i in (0, 1, 3, 2)])
+    # print(result)
+    return result
 
 
 def find_n(line: str) -> str:
@@ -114,10 +116,14 @@ for file_name in os.listdir(TABLE_DIR_NAME):
         while line := f.readline():
             key = get_key_for_table(line)
             n_table[tag][key] = find_n_for_table(line)
+    # print(tag)
+    # print(n_table[tag])
+# print(n_table)
 print(f"{len(n_table) - 1} additional tables read!")
 
 
 def get_n(quantum_numbers: tuple[str, str, str, str], tag: str) -> str:
+    tag = tag + "_table.txt"
     if tag not in n_table:
         tag = "default"
     return n_table[tag][quantum_numbers]

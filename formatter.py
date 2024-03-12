@@ -267,6 +267,7 @@ class Formatter:
 
         if not format_dict[N_UPPER]:
             try:
+                # print(self.tag)
                 format_dict[N_UPPER] = get_n(
                     tuple(
                         [
@@ -282,6 +283,7 @@ class Formatter:
                 format_dict[N_UPPER] = "1"
         if not format_dict[N_LOWER]:
             try:
+                # print(self.tag)
                 format_dict[N_LOWER] = get_n(
                     tuple(
                         [

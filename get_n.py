@@ -79,7 +79,7 @@ def get_key(line: str) -> tuple[str, str, str, str]:
 
 def get_key_for_table(line: str) -> tuple[str, str, str, str]:
     splitted_line = line.split()
-    return tuple(splitted_line[1][:4])
+    return tuple([splitted_line[1][i] for i in (0, 1, 3, 2)])
 
 
 def find_n(line: str) -> str:

@@ -27,6 +27,7 @@ DEFAULT_UNCERTAINTY_PROVIDED = "D"
 
 DEFAULT_UNCERTAINTY = "0.001"
 
+CONVERSION_FACTOR = 0.0000334
 
 # to use this formatter, provide it with the input string and the format of the input string
 # for example, you can have
@@ -300,6 +301,10 @@ class Formatter:
 
         format_dict[J_LOWER] = str(int(format_dict[J_LOWER]))
         format_dict[J_UPPER] = str(int(format_dict[J_UPPER]))
+
+        wavenumber = float(format_dict[TRANSITION_WAVENUMBER])
+        if wavenumber > 20000:
+            format_dict[TRANSITION_WAVENUMBER] = str(wavenumber * CONVERSION_FACTOR)
 
         output: str = " ".join(
             [format_dict[item] for item in Formatter.output_format.split()]

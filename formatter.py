@@ -77,7 +77,7 @@ class Formatter:
         if OVER in self.input_format:
             self.input_format.pop()
         self.tag = tag
-        print(f"{self.input_format = }")
+        # print(f"{self.input_format = }")
 
     def format(self, input_str: str) -> str:
         input_items: list[str] = [
@@ -97,7 +97,7 @@ class Formatter:
         format_dict[TAG] = self.tag
 
         for item_format, item in zip(self.input_format, input_items):
-            print(f"{item_format = }, {item = }")
+            # print(f"{item_format = }, {item = }")
             if len(item_format) == 1:
                 format_dict[item_format] = item
             else:
@@ -121,7 +121,7 @@ class Formatter:
                             format_dict[item_format[i]] = item[starting_pos:ending_pos]
                         i += 1
                         j += 1
-        print(format_dict)
+        # print(format_dict)
 
         if not format_dict[P_UPPER]:
             v1_upper = int(format_dict[V1_UPPER])

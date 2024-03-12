@@ -106,7 +106,7 @@ class Formatter:
                 #     format_dict[qn] = value
                 if item_format[0] == BRANCH:
                     format_dict[BRANCH] = item[0]
-                    format_dict[item_format[1]] = item[1:]
+                    format_dict[item_format[1]] = str(int(item[1:]))
                 else:
                     i = 0
                     j = 0

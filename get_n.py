@@ -114,7 +114,7 @@ for file_name in os.listdir(TABLE_DIR_NAME):
         while line := f.readline():
             key = get_key_for_table(line)
             n_table[tag][key] = find_n_for_table(line)
-    print(f"{len(n_table) - 1} additional tables read!")
+print(f"{len(n_table) - 1} additional tables read!")
 
 
 def get_n(quantum_numbers: tuple[str, str, str, str], tag: str) -> str:

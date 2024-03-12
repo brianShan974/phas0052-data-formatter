@@ -6,6 +6,9 @@ from typing import Literal
 from formatter import Formatter
 
 
+mode = "multiple_files"
+# mode = "single_file"
+
 INPUT_DIR_NAME = "extracted_raw/"
 OUTPUT_DIR_NAME = "extracted/"
 TARGET_FILE_NAME = "marvel.txt"
@@ -98,6 +101,13 @@ def tag_lines_by_source_and_transitions(lines_with_n: list[str]) -> list[str]:
     return result
 
 
+def tag_single_file(lines: list[str]) -> list[str]:
+    result = []
+    for i, line in enumerate(lines):
+        result.append(f"{line}.{i}")
+    return result
+
+
 def main():
     file_names = tuple([file_name for file_name in os.listdir(INPUT_DIR_NAME)])
 
@@ -137,11 +147,20 @@ def main():
             #         print(f"N and P not found in file {file_name} on line {i}!")
             for _ in range(5):
                 print()
-    tagged_lines = tag_lines_by_source_and_transitions(lines)
-    tagged_lines.sort(key=lower_state_sort_key)
-    with open(TARGET_FILE_NAME, "w") as f:
-        for line in tagged_lines:
-            f.write(line + "\n")
+            if mode == "multiple_files":
+                tagged_lines = tag_lines_by_source_and_transitions(lines)
+                with open(
+                    OUTPUT_DIR_NAME + file_name.split(".")[0] + "_extracted.txt", "w"
+                ) as f:
+                    for line in tagged_lines:
+                        f.write(line + "\n")
+                lines.clear()
+    if mode == "single_file":
+        tagged_lines = tag_lines_by_source_and_transitions(lines)
+        tagged_lines.sort(key=lower_state_sort_key)
+        with open(TARGET_FILE_NAME, "w") as f:
+            for line in tagged_lines:
+                f.write(line + "\n")
 
     # print(f"{not_found_count = }")
 

@@ -23,6 +23,7 @@ J_LOWER = "j"
 TAG = "t"
 USELESS = "u"
 OVER = "O"
+DEFAULT_UNCERTAINTY_PROVIDED = "D"
 
 DEFAULT_UNCERTAINTY = "0.001"
 
@@ -73,9 +74,20 @@ class Formatter:
         self.reset(input_format, tag)
 
     def reset(self, input_format: str, tag: str) -> None:
-        self.input_format: list[str] = input_format.strip().split()
-        if OVER in self.input_format:
-            self.input_format.pop()
+        splitted_input_format: list[str] = input_format.strip().split()
+        self.default_uncertainty = ""
+        if splitted_input_format:
+            if OVER == splitted_input_format[-1]:
+                self.input_format = splitted_input_format
+                self.input_format.pop()
+            elif OVER == splitted_input_format[-3]:
+                self.input_format = splitted_input_format[:-3]
+                assert splitted_input_format[-2] == DEFAULT_UNCERTAINTY_PROVIDED
+                self.default_uncertainty = splitted_input_format[-1]
+            else:
+                self.input_format = splitted_input_format
+        else:
+            self.input_format = []
         self.tag = tag
         # print(f"{self.input_format = }")
 
@@ -281,8 +293,8 @@ class Formatter:
             except KeyError:
                 format_dict[N_LOWER] = "1"
 
-        if not format_dict[UNCERTAINTY]:
-            format_dict[UNCERTAINTY] = DEFAULT_UNCERTAINTY
+        if self.default_uncertainty:
+            format_dict[UNCERTAINTY] = self.default_uncertainty
 
         format_dict[J_LOWER] = str(int(format_dict[J_LOWER]))
         format_dict[J_UPPER] = str(int(format_dict[J_UPPER]))

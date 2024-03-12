@@ -105,7 +105,7 @@ def tag_lines_by_source_and_transitions(lines_with_n: list[str]) -> list[str]:
 def tag_single_file(lines: list[str]) -> list[str]:
     result = []
     for i, line in enumerate(lines):
-        result.append(f"{line}.{i}")
+        result.append(f"{line}.{i + 1}")
     return result
 
 
@@ -150,7 +150,7 @@ def main():
             # for _ in range(5):
             #     print()
             if mode == "multiple_files":
-                tagged_lines = tag_lines_by_source_and_transitions(lines)
+                tagged_lines = tag_single_file(lines)
                 with open(
                     OUTPUT_DIR_NAME + file_name.split(".")[0] + "_extracted.txt", "w"
                 ) as f:

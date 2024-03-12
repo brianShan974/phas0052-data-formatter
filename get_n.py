@@ -48,6 +48,11 @@
 # file_name = "n2o.12iso.296K.1E-31.15Kcm-1.Y02-A8.dmsC.v2.dat"
 
 # format j e/f # E v1 v2 l v3 useless u
+
+
+import os
+
+
 from extract_from_table import new_file_name as file_name
 
 # label = "42"
@@ -61,6 +66,10 @@ from extract_from_table import new_file_name as file_name
 # with open(new_file_name, 'w') as f:
 #     f.writelines(lines)
 
+TABLE_DIR_NAME = "./n_tables/"
+
+# TABLES = os.listdir(TABLE_DIR_NAME)
+
 
 def get_key(line: str) -> tuple[str, str, str, str]:
     splitted_line = line.split()
@@ -68,21 +77,47 @@ def get_key(line: str) -> tuple[str, str, str, str]:
     return splitted_line[4], splitted_line[5], splitted_line[7], splitted_line[6]
 
 
+def get_key_for_table(line: str) -> tuple[str, str, str, str]:
+    splitted_line = line.split()
+    return tuple(splitted_line[1][:4])
+
+
 def find_n(line: str) -> str:
     return line.split()[-1]
 
 
-n_table: dict[tuple[str, str, str, str], str] = {}
+def find_n_for_table(line: str) -> str:
+    splitted_line = line.split()
+    index_of_last_parenthesis = max(
+        [i for i in range(len(splitted_line)) if ")" in splitted_line[i]]
+    )
+    return str(int(splitted_line[index_of_last_parenthesis][:-1]))
+
+
+n_table: dict[str, dict[tuple[str, str, str, str], str]] = {}
 
 with open(file_name) as f:
+    n_table["default"] = {}
     while line := f.readline():
         key = get_key(line)
-        n_table[key] = find_n(line)
+        n_table["default"][key] = find_n(line)
     # for key, value in n_table.items():
     #     if len(value) > 1:
     #         print(f"{key = }, {value = }")
-    assert len(n_table) == 2017
+    assert len(n_table["default"]) == 2017
 
 
-def get_n(quantum_numbers: tuple[str, str, str, str]) -> str:
-    return n_table[quantum_numbers]
+for file_name in os.listdir(TABLE_DIR_NAME):
+    tag = file_name.split()[0]
+    n_table[tag] = {}
+    with open(TABLE_DIR_NAME + file_name) as f:
+        while line := f.readline():
+            key = get_key_for_table(line)
+            n_table[tag][key] = find_n_for_table(line)
+    print(f"{len(n_table) - 1} additional tables read!")
+
+
+def get_n(quantum_numbers: tuple[str, str, str, str], tag: str) -> str:
+    if tag not in n_table:
+        tag = "default"
+    return n_table[tag][quantum_numbers]

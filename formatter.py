@@ -274,7 +274,8 @@ class Formatter:
                             format_dict[V3_UPPER],
                             format_dict[L_UPPER],
                         ]
-                    )
+                    ),
+                    self.tag,
                 )
             except KeyError:
                 format_dict[N_UPPER] = "1"
@@ -288,7 +289,8 @@ class Formatter:
                             format_dict[V3_LOWER],
                             format_dict[L_LOWER],
                         ]
-                    )
+                    ),
+                    self.tag,
                 )
             except KeyError:
                 format_dict[N_LOWER] = "1"

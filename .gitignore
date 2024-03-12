@@ -14,4 +14,7 @@
 !extracted/
 !extracted/*
 
+!n_tables/
+!n_tables/*
+
 !marvel.*

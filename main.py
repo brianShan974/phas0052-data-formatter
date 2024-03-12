@@ -12,6 +12,7 @@ mode = "multiple_files"
 INPUT_DIR_NAME = "extracted_raw/"
 OUTPUT_DIR_NAME = "extracted/"
 TARGET_FILE_NAME = "marvel.txt"
+TABLE_DIR_NAME = "n_tables/"
 if not os.path.exists(OUTPUT_DIR_NAME):
     os.mkdir(OUTPUT_DIR_NAME)
 
@@ -128,8 +129,9 @@ def main():
             temp_lines = f.readlines()
             format = temp_lines.pop(0)
             formatter.reset(format, tag)
+            # print(os.listdir("./n_tables/"))
             for line in temp_lines:
-                print(f"{line = }")
+                # print(f"{line = }")
                 try:
                     formatted_line = formatter.format(line)
                     lines.append(formatted_line)
@@ -145,8 +147,8 @@ def main():
             #         result.append(formatter.format(line) + "\n")
             #     except ValueError:
             #         print(f"N and P not found in file {file_name} on line {i}!")
-            for _ in range(5):
-                print()
+            # for _ in range(5):
+            #     print()
             if mode == "multiple_files":
                 tagged_lines = tag_lines_by_source_and_transitions(lines)
                 with open(

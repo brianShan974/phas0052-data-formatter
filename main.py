@@ -6,10 +6,11 @@ from typing import Literal
 from formatter import Formatter
 
 
-input_dir_name = "extracted_raw/"
-output_dir_name = "extracted/"
-if not os.path.exists(output_dir_name):
-    os.mkdir(output_dir_name)
+INPUT_DIR_NAME = "extracted_raw/"
+OUTPUT_DIR_NAME = "extracted/"
+TARGET_FILE_NAME = "marvel.txt"
+if not os.path.exists(OUTPUT_DIR_NAME):
+    os.mkdir(OUTPUT_DIR_NAME)
 
 
 def lower_state_sort_key(formatted_line: str) -> str:
@@ -98,7 +99,7 @@ def tag_lines_by_source_and_transitions(lines_with_n: list[str]) -> list[str]:
 
 
 def main():
-    file_names = tuple([file_name for file_name in os.listdir(input_dir_name)])
+    file_names = tuple([file_name for file_name in os.listdir(INPUT_DIR_NAME)])
 
     formatter = Formatter("", "")
 
@@ -109,11 +110,11 @@ def main():
     # file_names = ["22KaTaKaCa.txt"]
 
     for file_name in file_names:
-        print(f"Processing {input_dir_name}{file_name}")
+        print(f"Processing {INPUT_DIR_NAME}{file_name}")
         tag = "".join(file_name.split(".")[0].split())
         if tag[-1].isnumeric():
             tag = tag[:-1]
-        with open(f"{input_dir_name}{file_name}") as f:
+        with open(f"{INPUT_DIR_NAME}{file_name}") as f:
             temp_lines = f.readlines()
             format = temp_lines.pop(0)
             formatter.reset(format, tag)
@@ -138,7 +139,7 @@ def main():
                 print()
     tagged_lines = tag_lines_by_source_and_transitions(lines)
     tagged_lines.sort(key=lower_state_sort_key)
-    with open("marvel.dat", "w") as f:
+    with open(TARGET_FILE_NAME, "w") as f:
         for line in tagged_lines:
             f.write(line + "\n")
 

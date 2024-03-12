@@ -284,6 +284,9 @@ class Formatter:
         if not format_dict[UNCERTAINTY]:
             format_dict[UNCERTAINTY] = DEFAULT_UNCERTAINTY
 
+        format_dict[J_LOWER] = str(int(format_dict[J_LOWER]))
+        format_dict[J_UPPER] = str(int(format_dict[J_UPPER]))
+
         output: str = " ".join(
             [format_dict[item] for item in Formatter.output_format.split()]
         )

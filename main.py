@@ -88,7 +88,7 @@ def tag_lines_by_source_and_transitions(lines_with_n: list[str]) -> list[str]:
         letter_index = base10ToBase25Letter(i + 1)
         for j, line in enumerate(dict_for_tagging[key]):
             dict_for_tagging[key][j] = (
-                dict_for_tagging[key][j] + letter_index + str(j + 1)
+                dict_for_tagging[key][j] + f".{letter_index}{str(j + 1)}"
             )
 
     result = []

@@ -5,8 +5,11 @@
 
 !*.py
 
+!fort.1900.N2O.456.20211108
+
 # !*.dat
 !extracted.dat
 !extracted_raw/
 !extracted_raw/*
+
 !marvel.dat

@@ -11,5 +11,7 @@
 !extracted.dat
 !extracted_raw/
 !extracted_raw/*
+!extracted/
+!extracted/*
 
 !marvel.*

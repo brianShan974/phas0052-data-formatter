@@ -9,7 +9,8 @@ from formatter import Formatter
 mode = "multiple_files"
 # mode = "single_file"
 
-INPUT_DIR_NAME = "extracted_raw/"
+# INPUT_DIR_NAME = "raw/"
+INPUT_DIR_NAME = "raw_separate/"
 OUTPUT_DIR_NAME = "extracted/"
 TARGET_FILE_NAME = "marvel.txt"
 TABLE_DIR_NAME = "n_tables/"

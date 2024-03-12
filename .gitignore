@@ -9,8 +9,12 @@
 
 # !*.dat
 !extracted.dat
-!extracted_raw/
-!extracted_raw/*
+# !extracted_raw/
+# !extracted_raw/*
+!raw/
+!raw/*
+!raw_separate/
+!raw_separate/*
 !extracted/
 !extracted/*
 

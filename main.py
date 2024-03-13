@@ -9,10 +9,10 @@ from formatter import Formatter
 mode = "multiple_files"
 # mode = "single_file"
 
-# INPUT_DIR_NAME = "raw/"
-INPUT_DIR_NAME = "raw_separate/"
-# OUTPUT_DIR_NAME = "extracted/"
-OUTPUT_DIR_NAME = "extracted_separate/"
+INPUT_DIR_NAME = "raw/"
+OUTPUT_DIR_NAME = "extracted/"
+# INPUT_DIR_NAME = "raw_separate/"
+# OUTPUT_DIR_NAME = "extracted_separate/"
 TARGET_FILE_NAME = "marvel.txt"
 TABLE_DIR_NAME = "n_tables/"
 if not os.path.exists(OUTPUT_DIR_NAME):
@@ -116,7 +116,7 @@ def tag_single_file(lines: list[str]) -> list[str]:
 
 
 def main():
-    file_names = tuple([file_name for file_name in os.listdir(INPUT_DIR_NAME)])
+    file_names = tuple(sorted([file_name for file_name in os.listdir(INPUT_DIR_NAME)]))
 
     formatter = Formatter("", "")
 
@@ -127,6 +127,8 @@ def main():
     # file_names = ["22KaTaKaCa.txt"]
 
     for file_name in file_names:
+        if mode == "multiple_files":
+            lines.clear()
         print(f"Processing {INPUT_DIR_NAME}{file_name}")
         tag = "".join(file_name.split(".")[0].split())
         if tag[-1].isnumeric():
@@ -155,6 +157,17 @@ def main():
             #         print(f"N and P not found in file {file_name} on line {i}!")
             # for _ in range(5):
             #     print()
+            print(f"{formatter.upper_n_miss_count = }")
+            print(f"{formatter.lower_n_miss_count = }")
+            print(f"{len(lines) = }")
+            sample_size = len(lines)
+            if (
+                formatter.upper_n_miss_count >= sample_size / 2
+                or formatter.lower_n_miss_count >= sample_size / 2
+            ):
+                print(f"Too many misses in {tag}, the file is ignored.")
+                print()
+                continue
             if mode == "multiple_files":
                 lines.sort(key=wavenumber_sort_key)
                 print(lines[0].split()[0])
@@ -166,7 +179,7 @@ def main():
                 ) as f:
                     for line in tagged_lines:
                         f.write(line + "\n")
-                lines.clear()
+        print()
     if mode == "single_file":
         tagged_lines = tag_lines_by_source_and_transitions(lines)
         tagged_lines.sort(key=lower_state_sort_key)

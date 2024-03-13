@@ -98,34 +98,36 @@ def find_n_for_table(line: str) -> str:
     return str(int(splitted_line[index_of_last_parenthesis][:-1]))
 
 
-n_table: dict[str, dict[tuple[str, str, str, str], str]] = {}
+n_table: dict[tuple[str, str, str, str], str] = {}
 
 with open(file_name) as f:
-    n_table["default"] = {}
     while line := f.readline():
         key = get_key(line)
-        n_table["default"][key] = find_n(line)
+        n_table[key] = find_n(line)
     # for key, value in n_table.items():
     #     if len(value) > 1:
     #         print(f"{key = }, {value = }")
-    assert len(n_table["default"]) == 2017
+    assert len(n_table) == 2017
 
+N_table: dict[str, dict[tuple[str, str, str, str], str]] = {}
 
 for file_name in os.listdir(TABLE_DIR_NAME):
     tag = file_name.split()[0]
-    n_table[tag] = {}
+    N_table[tag] = {}
     with open(TABLE_DIR_NAME + file_name) as f:
         while line := f.readline():
             key = get_key_for_table(line)
-            n_table[tag][key] = find_n_for_table(line)
+            N_table[tag][key] = find_n_for_table(line)
     # print(tag)
     # print(n_table[tag])
 # print(n_table)
-print(f"{len(n_table) - 1} additional tables read!")
+print(f"{len(N_table) - 1} additional tables read!")
 
 
-def get_n(quantum_numbers: tuple[str, str, str, str], tag: str) -> str:
+def get_upper_n(quantum_numbers: tuple[str, str, str, str], tag: str) -> str:
     tag = tag + "_table.txt"
-    if tag not in n_table:
-        tag = "default"
-    return n_table[tag][quantum_numbers]
+    return N_table[tag][quantum_numbers]
+
+
+def get_lower_n(quantum_numbers: tuple[str, str, str, str]) -> str:
+    return n_table[quantum_numbers]

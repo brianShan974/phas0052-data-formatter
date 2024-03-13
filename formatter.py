@@ -1,4 +1,5 @@
-from get_n import get_n
+from get_n import get_upper_n, get_lower_n
+from get_uncertainty import get_uncert
 
 # input format
 TRANSITION_WAVENUMBER = "T"
@@ -70,13 +71,26 @@ class Formatter:
         USELESS: "",
     }
     output_format: str = r"T U P L N E J p l n e j t"
+    large_tag = "08NiSoPeTaLiWaHu"
+    separated_tags = [
+        "97MoFaMa",
+        "74KrSa",
+        "76Am",
+        "06WaPeTaGaHaHu",
+        "07LiKaMaRoPeTaHuCa",
+        "06HePiGuSoSo",
+        "05To",
+        "76AnBuKaKrSh",
+        "91To",
+        "86To",
+        "82Gu",
+    ]
 
     def __init__(self, input_format: str, tag: str) -> None:
         self.reset(input_format, tag)
 
     def reset(self, input_format: str, tag: str) -> None:
         splitted_input_format: list[str] = input_format.strip().split()
-        self.default_uncertainty = ""
         if splitted_input_format:
             if OVER == splitted_input_format[-1]:
                 self.input_format = splitted_input_format
@@ -85,11 +99,31 @@ class Formatter:
                 self.input_format = splitted_input_format[:-3]
                 assert splitted_input_format[-2] == DEFAULT_UNCERTAINTY_PROVIDED
                 self.default_uncertainty = splitted_input_format[-1]
+            elif splitted_input_format[-2] == DEFAULT_UNCERTAINTY_PROVIDED:
+                self.input_format = splitted_input_format[-2]
             else:
                 self.input_format = splitted_input_format
         else:
             self.input_format = []
         self.tag = tag
+        try:
+            self.default_uncertainty = get_uncert(self.tag)
+        except KeyError:
+            uncertainty_not_found = True
+            if splitted_input_format:
+                if splitted_input_format[-2] == DEFAULT_UNCERTAINTY_PROVIDED:
+                    self.default_uncertainty = splitted_input_format[-1]
+                    uncertainty_not_found = False
+                else:
+                    self.default_uncertainty = DEFAULT_UNCERTAINTY
+            else:
+                self.default_uncertainty = DEFAULT_UNCERTAINTY
+            if uncertainty_not_found and tag:
+                print(
+                    f"The uncertainty of {self.tag} not found, using uncertainty = {self.default_uncertainty}"
+                )
+        self.lower_n_miss_count = 0
+        self.upper_n_miss_count = 0
         # print(f"{self.input_format = }")
 
     def format(self, input_str: str) -> str:
@@ -268,7 +302,7 @@ class Formatter:
         if not format_dict[N_UPPER]:
             try:
                 # print(self.tag)
-                format_dict[N_UPPER] = get_n(
+                format_dict[N_UPPER] = get_upper_n(
                     tuple(
                         [
                             format_dict[V1_UPPER],
@@ -277,14 +311,18 @@ class Formatter:
                             format_dict[L_UPPER],
                         ]
                     ),
-                    self.tag,
+                    self.tag
+                    if self.tag not in Formatter.separated_tags
+                    else Formatter.large_tag,
                 )
             except KeyError:
+                # print("Lower N not found!")
+                self.upper_n_miss_count += 1
                 format_dict[N_UPPER] = "1"
         if not format_dict[N_LOWER]:
             try:
                 # print(self.tag)
-                format_dict[N_LOWER] = get_n(
+                format_dict[N_LOWER] = get_lower_n(
                     tuple(
                         [
                             format_dict[V1_LOWER],
@@ -292,14 +330,17 @@ class Formatter:
                             format_dict[V3_LOWER],
                             format_dict[L_LOWER],
                         ]
-                    ),
-                    self.tag,
+                    )
                 )
             except KeyError:
+                # print("Lower N not found!")
+                self.lower_n_miss_count += 1
                 format_dict[N_LOWER] = "1"
 
         if self.default_uncertainty:
             format_dict[UNCERTAINTY] = self.default_uncertainty
+        else:
+            format_dict[UNCERTAINTY] = DEFAULT_UNCERTAINTY
 
         format_dict[J_LOWER] = str(int(format_dict[J_LOWER]))
         format_dict[J_UPPER] = str(int(format_dict[J_UPPER]))

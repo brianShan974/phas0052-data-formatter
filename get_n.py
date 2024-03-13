@@ -79,7 +79,9 @@ def get_key(line: str) -> tuple[str, str, str, str]:
 
 def get_key_for_table(line: str) -> tuple[str, str, str, str]:
     splitted_line = line.split()
-    result = tuple([splitted_line[1][i] for i in (0, 1, 3, 2)])
+    result: tuple[str, str, str, str] = tuple(
+        [splitted_line[1][i] for i in (0, 1, 3, 2)]
+    )
     # print(result)
     return result
 

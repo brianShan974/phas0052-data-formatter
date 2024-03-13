@@ -11,7 +11,8 @@ mode = "multiple_files"
 
 # INPUT_DIR_NAME = "raw/"
 INPUT_DIR_NAME = "raw_separate/"
-OUTPUT_DIR_NAME = "extracted/"
+# OUTPUT_DIR_NAME = "extracted/"
+OUTPUT_DIR_NAME = "extracted_separate/"
 TARGET_FILE_NAME = "marvel.txt"
 TABLE_DIR_NAME = "n_tables/"
 if not os.path.exists(OUTPUT_DIR_NAME):

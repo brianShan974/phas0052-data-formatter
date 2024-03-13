@@ -56,6 +56,10 @@ def tag_sort_key(formatted_line: str) -> str:
     return get_tag(formatted_line) + " " + transition_sort_key(formatted_line)
 
 
+def wavenumber_sort_key(formatted_line: str) -> float:
+    return float(formatted_line.split()[0])
+
+
 # def find_n(lines_without_n: dict[str, list[str]]) -> list[str]:
 #     for key in lines_without_n.keys():
 #         lines_without_n[key].sort(key=n_sort_key)
@@ -152,6 +156,10 @@ def main():
             # for _ in range(5):
             #     print()
             if mode == "multiple_files":
+                lines.sort(key=wavenumber_sort_key)
+                print(lines[0].split()[0])
+                print(lines[-1].split()[0])
+                print(len(lines))
                 tagged_lines = tag_single_file(lines)
                 with open(
                     OUTPUT_DIR_NAME + file_name.split(".")[0] + "_extracted.txt", "w"
